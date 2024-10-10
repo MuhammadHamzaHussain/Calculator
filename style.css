@@ -174,7 +174,7 @@
 
     .zero:first-child {
         grid-column: span 2;
-        width: 170px;
+        width: 140px;
         border-radius: 50px;
     }
 }
