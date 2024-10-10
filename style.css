@@ -1,5 +1,5 @@
 /* Media queries for responsive design */
-@media only screen and (min-width: 150px) and (max-width: 430px) {
+@media only screen and (min-width: 150px) and (max-width: 480px) {
     * {
         margin: 0;
         padding: 0;
@@ -9,7 +9,7 @@
     body {
         background-color: black;
         font-family: Arial, sans-serif;
-        margin: 10px;
+        /* margin: 10px; */
     }
 
     .container {
@@ -22,8 +22,10 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         justify-content: center;
+        justify-items: center;
         gap: 20px;
     }
+
 
     .ac {
         width: 70px;
@@ -53,6 +55,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         justify-content: center;
+        justify-items: center;
         gap: 20px;
     }
 
@@ -84,6 +87,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         justify-content: center;
+        justify-items: center;
         gap: 20px;
     }
 
@@ -115,6 +119,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         justify-content: center;
+        justify-items: center;
         gap: 20px;
     }
 
@@ -145,12 +150,15 @@
         margin-top: 20px;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
+        /* 4 equal columns */
         justify-content: center;
+        justify-items: center;
         gap: 20px;
     }
 
-    .zero {
+    .dot {
         width: 70px;
+        /* Set width here to control individual cell sizes */
         height: 70px;
         background-color: #9999;
         border-radius: 50%;
@@ -172,9 +180,19 @@
         color: #D4D4D2;
     }
 
-    .zero:first-child {
+    /* Adjust the first child to span two columns */
+    .zero {
+        background-color: #9999;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         grid-column: span 2;
-        width: 140px;
+        /* Spans two columns */
+        width: 165px;
+        /* Adjust width to match the layout */
         border-radius: 50px;
+        /* Keep the rounded appearance */
     }
+
 }
