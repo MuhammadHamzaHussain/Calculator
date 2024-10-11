@@ -15,7 +15,6 @@
     .container {
         width: 100%;
         height: auto;
-        /* Changed to auto for better responsiveness */
         padding: 20px 5px;
     }
 
@@ -165,7 +164,7 @@
         align-items: center;
     }
 
-    .zero h2 {
+    .zero h2, .dot h2 {
         color: #D4D4D2;
         text-align: center;
     }
