@@ -1,94 +1,130 @@
 // index.js
 
-let calculation = "";
-let currentInput = "";
-let operator = "";
+// Get DOM elements
+const calculationDisplay = document.getElementById('calculation');
+const resultDisplay = document.getElementById('result');
 
-// Function to update the display
+// Variables to store current input, previous input, and the selected operator
+let currentInput = '';
+let previousInput = '';
+let operator = null;
+let result = null;
+let shouldReset = false;
+
+// Update display with the current calculation and result
 function updateDisplay() {
-    document.getElementById("calculation").innerText = calculation;
-    document.getElementById("result").innerText = currentInput || "0";
+    calculationDisplay.innerText = `${previousInput} ${operator || ''} ${currentInput}`;
+    resultDisplay.innerText = result || currentInput || '0';
 }
 
-// Function to handle number button clicks
-function appendNumber(number) {
-    if (currentInput.length <= 10) { // Limit the input length
+// Handle number button click
+function handleNumber(number) {
+    if (shouldReset) {
+        currentInput = number;
+        shouldReset = false;
+    } else {
         currentInput += number;
-        updateDisplay();
     }
-}
-
-// Function to handle operator button clicks
-function chooseOperator(selectedOperator) {
-    if (currentInput === "" && calculation === "") return;
-    if (currentInput !== "") {
-        if (calculation) {
-            performCalculation(); // Perform calculation if an operator is already present
-        }
-        calculation = currentInput;
-        currentInput = "";
-    }
-    operator = selectedOperator;
-    calculation += ` ${operator} `;
     updateDisplay();
 }
 
-// Function to perform the calculation
-function performCalculation() {
-    if (operator === "") return;
-    const calculationParts = calculation.split(" ");
-    const num1 = parseFloat(calculationParts[0]);
-    const num2 = parseFloat(currentInput);
+// Handle operator button click
+function handleOperator(op) {
+    if (currentInput === '' && result !== null) {
+        previousInput = result;
+    } else if (currentInput !== '') {
+        if (previousInput !== '') {
+            calculate(); // Perform previous calculation
+        }
+        previousInput = currentInput;
+        currentInput = '';
+    }
+    operator = op;
+    shouldReset = false;
+    updateDisplay();
+}
 
-    if (isNaN(num1) || isNaN(num2)) return;
+// Perform the calculation
+function calculate() {
+    if (operator === null || previousInput === '' || currentInput === '') return;
 
-    let result;
+    const prev = parseFloat(previousInput);
+    const curr = parseFloat(currentInput);
+
     switch (operator) {
-        case "+":
-            result = num1 + num2;
+        case '+':
+            result = prev + curr;
             break;
-        case "-":
-            result = num1 - num2;
+        case '-':
+            result = prev - curr;
             break;
-        case "*":
-            result = num1 * num2;
+        case '*':
+            result = prev * curr;
             break;
-        case "/":
-            result = num1 / num2;
+        case '/':
+            result = prev / curr;
             break;
         default:
             return;
     }
     currentInput = result.toString();
-    calculation = "";
-    operator = "";
+    previousInput = '';
+    operator = null;
+    shouldReset = true;
     updateDisplay();
 }
 
-// Function to reset the calculator (AC)
-function resetCalculator() {
-    calculation = "";
-    currentInput = "";
-    operator = "";
+// Handle AC (All Clear) button
+function handleClear() {
+    currentInput = '';
+    previousInput = '';
+    operator = null;
+    result = null;
+    shouldReset = false;
     updateDisplay();
 }
 
-// Event listeners for buttons
-document.querySelectorAll('.seven, .four, .one, .zero').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        const number = e.target.innerText;
-        appendNumber(number);
-    });
+// Handle +/- button (negate the current input)
+function handleNegate() {
+    if (currentInput === '') return;
+    currentInput = (-parseFloat(currentInput)).toString();
+    updateDisplay();
+}
+
+// Handle % button (convert to percentage)
+function handlePercentage() {
+    if (currentInput === '') return;
+    currentInput = (parseFloat(currentInput) / 100).toString();
+    updateDisplay();
+}
+
+// Handle equal button
+function handleEqual() {
+    calculate();
+}
+
+// Handle decimal button
+function handleDecimal() {
+    if (currentInput.includes('.')) return;
+    currentInput += '.';
+    updateDisplay();
+}
+
+// Add event listeners to buttons
+document.querySelectorAll('.seven h2, .four h2, .one h2, .zero h2').forEach(button => {
+    button.addEventListener('click', (e) => handleNumber(e.target.innerText));
 });
 
-document.querySelector('.plus').addEventListener('click', () => chooseOperator('+'));
-document.querySelector('.minus').addEventListener('click', () => chooseOperator('-'));
-document.querySelector('.cross').addEventListener('click', () => chooseOperator('*'));
-document.querySelector('.divide').addEventListener('click', () => chooseOperator('/'));
+document.querySelector('.plus').addEventListener('click', () => handleOperator('+'));
+document.querySelector('.minus').addEventListener('click', () => handleOperator('-'));
+document.querySelector('.cross').addEventListener('click', () => handleOperator('*'));
+document.querySelector('.divide').addEventListener('click', () => handleOperator('/'));
 
-document.querySelector('.equal').addEventListener('click', performCalculation);
+document.querySelector('.equal').addEventListener('click', handleEqual);
+document.querySelector('.ac').addEventListener('click', handleClear);
+document.querySelector('.fa-plus-minus').parentElement.addEventListener('click', handleNegate);
+document.querySelector('.fa-percent').parentElement.addEventListener('click', handlePercentage);
+document.querySelector('.dot').addEventListener('click', handleDecimal);
 
-document.querySelector('.ac').addEventListener('click', resetCalculator);
-
-// Initial display update
+// Initialize display
 updateDisplay();
