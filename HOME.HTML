@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p id="first">
+        Lorem ipsum dolor sit amet <b>consectetur adipisicing</b> elit. Sed,            <br>   placeat.
+    </p>
+    <button onclick="functionOne()">Inner Text</button>
+    <button onclick="functionTwo()">Inner HTML</button>
+    <button onclick="functionThree()">Text Content</button>
+    <pre id="second"></pre>
+    <script>
+        function functionOne() {
+            let a = document.getElementById('first').innerText;
+            document.getElementById('second').innerText = a;
+        }
+
+        function functionTwo(){
+            let b = document.getElementById('first').innerHTML;
+            document.getElementById('second').innerText = b;
+        }
+
+        function functionThree(){
+            let b = document.getElementById('first').textContent;
+            document.getElementById('second').innerText = b;
+        }
+
+    </script>
+</body>
+
+</html>
