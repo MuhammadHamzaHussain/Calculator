@@ -1,65 +1,50 @@
 document.addEventListener("DOMContentLoaded", function () {
     let calculation = document.getElementById("calculation");
     let result = document.getElementById("result");
-    let currentInput = "";
-    let operator = "";
-    let firstNumber = null;
+    let expression = "";
 
     function updateDisplay() {
-        calculation.textContent = currentInput;
+        calculation.textContent = expression;
     }
 
     // Function to handle number input
     function handleNumber(num) {
-        currentInput += num;
+        expression += num;
         updateDisplay();
     }
 
     // Function to handle operator input
     function handleOperator(op) {
-        if (firstNumber === null) {
-            firstNumber = parseFloat(currentInput);
-        } else if (currentInput) {
-            firstNumber = calculate(firstNumber, parseFloat(currentInput), operator);
+        // Only add operator if there is no existing operator at the end
+        if (expression && !isNaN(expression[expression.length - 1])) {
+            expression += op;
+            updateDisplay();
         }
-        operator = op;
-        currentInput = "";
-        updateDisplay();
     }
 
     // Function to perform calculation
-    function calculate(num1, num2, op) {
-        switch (op) {
-            case "+":
-                return num1 + num2;
-            case "-":
-                return num1 - num2;
-            case "*":
-                return num1 * num2;
-            case "/":
-                return num2 !== 0 ? num1 / num2 : "Error";
-            default:
-                return num2;
+    function calculateExpression(expr) {
+        try {
+            // Evaluate the expression using JavaScript's eval (for basic operations only)
+            return eval(expr);
+        } catch (error) {
+            return "Error";
         }
     }
 
     // Function to handle equal button
     function handleEqual() {
-        if (operator && currentInput) {
-            let secondNumber = parseFloat(currentInput);
-            let calcResult = calculate(firstNumber, secondNumber, operator);
+        if (expression) {
+            let calcResult = calculateExpression(expression);
             result.textContent = calcResult;
-            currentInput = calcResult.toString();
-            firstNumber = null;
-            operator = "";
+            expression = calcResult.toString();
+            updateDisplay();
         }
     }
 
     // Function to handle clear button
     function handleClear() {
-        currentInput = "";
-        firstNumber = null;
-        operator = "";
+        expression = "";
         result.textContent = "";
         updateDisplay();
     }
