@@ -1,5 +1,3 @@
-// index.js
-
 // Selecting the elements that will display the calculation and result
 const calculationDisplay = document.getElementById('calculation');
 const resultDisplay = document.getElementById('result');
@@ -17,9 +15,9 @@ const updateDisplay = () => {
 
 // Function to handle button clicks for numbers and operations
 const handleButtonClick = (value) => {
-    // If it's a new input after a result, start fresh
+    // If it's a new input after a result (and a number is clicked), reset the calculation
     if (isNewInput) {
-        currentCalculation = '';
+        currentCalculation = ''; 
         isNewInput = false;
     }
 
@@ -30,18 +28,26 @@ const handleButtonClick = (value) => {
 
 // Function to handle operations
 const handleOperation = (operator) => {
-    if (currentCalculation === '') return;
+    if (currentCalculation === '' && operator !== '=') {
+        // If nothing is entered, do not process an operator
+        return;
+    }
 
     // Calculate the result when the equals button is clicked
     if (operator === '=') {
         try {
             currentResult = eval(currentCalculation); // Using eval to calculate the string
-            currentCalculation = currentResult.toString();
-            isNewInput = true;
+            currentCalculation = currentResult.toString(); // Allow further operations on the result
+            isNewInput = true; // Mark that the next input should reset the calculation
         } catch (error) {
             currentResult = 'Error';
         }
     } else {
+        // If user presses an operator after the result, continue calculation
+        if (isNewInput) {
+            currentCalculation = currentResult.toString();
+            isNewInput = false;
+        }
         currentCalculation += ` ${operator} `;
     }
 
@@ -52,6 +58,7 @@ const handleOperation = (operator) => {
 const resetCalculator = () => {
     currentCalculation = '';
     currentResult = 0;
+    isNewInput = false;
     updateDisplay();
 }
 
