@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let expression = "";
 
     function updateDisplay() {
-        calculation.textContent = expression;
+        calculation.textContent =  expression;
     }
 
     function handleNumber(num) {
@@ -12,14 +12,12 @@ document.addEventListener("DOMContentLoaded", function () {
         updateDisplay();
     }
 
-
     function handleOperator(op) {
         if (expression && !isNaN(expression[expression.length - 1])) {
             expression += op;
             updateDisplay();
         }
     }
-
 
     function calculateExpression(expr) {
         try {
@@ -33,11 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (expression) {
             let calcResult = calculateExpression(expression);
             result.textContent = calcResult;
-            expression = calcResult.toString();
-            updateDisplay();
         }
     }
-
 
     function handleClear() {
         expression = "";
