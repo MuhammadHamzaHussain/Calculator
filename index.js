@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function calculateExpression(expr) {
         try {
-            
             return eval(expr);
         } catch (error) {
             return "Error";
