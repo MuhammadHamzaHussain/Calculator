@@ -19,6 +19,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function handleDot() {
+        if (expression === "" || /[+\-*/]$/.test(expression)) {
+            expression += "0.";
+        }
+        else if (!/\.\d*$/.test(expression)) {
+            expression += ".";
+        }
+        updateDisplay();
+    }
+    
+
     function calculateExpression(expr) {
         try {
             return eval(expr);
@@ -65,4 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".equal").addEventListener("click", handleEqual);
 
     document.querySelector(".ac").addEventListener("click", handleClear);
+
+    document.querySelector(".dot").addEventListener("click", handleDot);
 });
