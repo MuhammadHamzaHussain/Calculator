@@ -2,15 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
     let calculation = document.getElementById("calculation");
     let result = document.getElementById("result");
     let expression = "";
-    let lastResult = null; 
-    let newOperation = false; 
+    let lastResult = null; // To store the result of the last calculation
+    let newOperation = false; // To track if the user is starting a new operation after a result
+
     function updateDisplay() {
         calculation.textContent = expression;
     }
 
     function handleNumber(num) {
         if (newOperation) {
-      
+            // Start a new expression after a result
             expression = "";
             result.textContent = "";
             newOperation = false;
@@ -21,20 +22,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function handleOperator(op) {
         if (lastResult !== null && !newOperation) {
-          
+            // Use the last result as the base for the next operation
             expression = lastResult.toString();
             lastResult = null;
         }
         if (expression && !/[+\-*/]$/.test(expression)) {
-         
+            // Append the operator only if the last character is not an operator
             expression += op;
             updateDisplay();
-            newOperation = false; 
+            newOperation = false; // Continue appending to the current expression
         }
     }
 
     function handleDot() {
         if (newOperation) {
+            // Reset the expression if starting a new operation
             expression = "0.";
             newOperation = false;
         } else if (expression === "" || /[+\-*/]$/.test(expression)) {
@@ -47,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function calculateExpression(expr) {
         try {
-            return eval(expr); 
+            return eval(expr); // You may want to replace eval with a safer alternative
         } catch (error) {
             return "Error";
         }
@@ -57,17 +59,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (expression && !/[+\-*/]$/.test(expression)) {
             let calcResult = calculateExpression(expression);
             if (typeof calcResult === 'number') {
-                calcResult = parseFloat(calcResult.toFixed(5));
-                lastResult = calcResult; 
+                calcResult = parseFloat(calcResult.toFixed(5)); // Format result to 5 decimal points
+                lastResult = calcResult; // Store the result for further operations
             }
             result.textContent = calcResult;
-            expression = calcResult.toString(); 
-            newOperation = true; 
+            expression = calcResult.toString(); // Reset the expression to the result for continued operations
+            newOperation = true; // Flag that a new operation might begin
+        }
     }
 
     function handleClear() {
         expression = "";
-        lastResult = null; 
+        lastResult = null; // Clear last result
         newOperation = false;
         result.textContent = "";
         updateDisplay();
