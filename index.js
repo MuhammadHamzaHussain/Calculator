@@ -83,15 +83,21 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function handlePlusMinus() {
-    // Toggle the sign of the last number
-    const lastNumberMatch = expression.match(/(-?\d+(\.\d+)?)$/);
+    const lastNumberMatch = expression.match(/(\(?-?\d+(\.\d+)?\)?)$/);
     if (lastNumberMatch) {
       const lastNumber = lastNumberMatch[0];
-      const newLastNumber = lastNumber.startsWith('-') ? lastNumber.slice(1) : '-' + lastNumber;
-      expression = expression.slice(0, -lastNumber.length) + newLastNumber;
+      const isNegative = lastNumber.startsWith("(");
+
+      if (isNegative) {
+        expression =
+          expression.slice(0, -lastNumber.length) + lastNumber.slice(2, -1);
+      } else {
+        expression =
+          expression.slice(0, -lastNumber.length) +
+          `(${lastNumber.startsWith("-") ? lastNumber : "-" + lastNumber})`;
+      }
     } else if (!expression) {
-      // If empty, start with negative sign
-      expression = "-";
+      expression = "(-";
     }
     updateDisplay();
   }
@@ -122,8 +128,12 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelector(".equal").addEventListener("click", handleEqual);
   document.querySelector(".ac").addEventListener("click", handleClear);
   document.querySelector(".dot").addEventListener("click", handleDot);
-  document.querySelector(".fa-arrow-left").parentElement.addEventListener("click", handleBackspace);
-  document.querySelector(".fa-plus-minus").parentElement.addEventListener("click", handlePlusMinus);
+  document
+    .querySelector(".fa-arrow-left")
+    .parentElement.addEventListener("click", handleBackspace);
+  document
+    .querySelector(".fa-plus-minus")
+    .parentElement.addEventListener("click", handlePlusMinus);
 
   updateDisplay();
 });
