@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let expression = "";
   let lastResult = null;
   let newOperation = false;
+
   function updateDisplay() {
     calculation.textContent = expression;
   }
@@ -71,6 +72,31 @@ document.addEventListener("DOMContentLoaded", function() {
     updateDisplay();
   }
 
+  function handleBackspace() {
+    if (newOperation) {
+      expression = "";
+      newOperation = false;
+    } else {
+      expression = expression.slice(0, -1);
+    }
+    updateDisplay();
+  }
+
+  function handlePlusMinus() {
+    // Toggle the sign of the last number
+    const lastNumberMatch = expression.match(/(-?\d+(\.\d+)?)$/);
+    if (lastNumberMatch) {
+      const lastNumber = lastNumberMatch[0];
+      const newLastNumber = lastNumber.startsWith('-') ? lastNumber.slice(1) : '-' + lastNumber;
+      expression = expression.slice(0, -lastNumber.length) + newLastNumber;
+    } else if (!expression) {
+      // If empty, start with negative sign
+      expression = "-";
+    }
+    updateDisplay();
+  }
+
+  // Event listeners for buttons
   document.querySelectorAll(".seven, .four, .one, .zero").forEach(button => {
     button.addEventListener("click", function() {
       handleNumber(this.textContent.trim());
@@ -94,8 +120,10 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   document.querySelector(".equal").addEventListener("click", handleEqual);
-
   document.querySelector(".ac").addEventListener("click", handleClear);
-
   document.querySelector(".dot").addEventListener("click", handleDot);
+  document.querySelector(".fa-arrow-left").parentElement.addEventListener("click", handleBackspace);
+  document.querySelector(".fa-plus-minus").parentElement.addEventListener("click", handlePlusMinus);
+
+  updateDisplay();
 });
