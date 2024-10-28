@@ -72,16 +72,6 @@ document.addEventListener("DOMContentLoaded", function() {
     updateDisplay();
   }
 
-  function handleBackspace() {
-    if (newOperation) {
-      expression = "";
-      newOperation = false;
-    } else {
-      expression = expression.slice(0, -1);
-    }
-    updateDisplay();
-  }
-
   function handlePlusMinus() {
     const lastNumberMatch = expression.match(/(\(?-?\d+(\.\d+)?\)?)$/);
     if (lastNumberMatch) {
@@ -102,7 +92,13 @@ document.addEventListener("DOMContentLoaded", function() {
     updateDisplay();
   }
 
-  // Event listeners for buttons
+  function handleBackspace() {
+    if (expression.length > 0) {
+      expression = expression.slice(0, -1);
+      updateDisplay();
+    }
+  }
+
   document.querySelectorAll(".seven, .four, .one, .zero").forEach(button => {
     button.addEventListener("click", function() {
       handleNumber(this.textContent.trim());
@@ -129,11 +125,12 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelector(".ac").addEventListener("click", handleClear);
   document.querySelector(".dot").addEventListener("click", handleDot);
   document
-    .querySelector(".fa-arrow-left")
-    .parentElement.addEventListener("click", handleBackspace);
-  document
     .querySelector(".fa-plus-minus")
     .parentElement.addEventListener("click", handlePlusMinus);
+
+  document
+    .querySelector(".fa-arrow-left")
+    .parentElement.addEventListener("click", handleBackspace);
 
   updateDisplay();
 });
